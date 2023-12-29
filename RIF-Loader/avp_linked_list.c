@@ -127,3 +127,23 @@ void AVP_linkedlist_print(
 		cursor_node = cursor_node->next;
 	}
 }
+
+
+uint32_t AVP_linkedlist_count(AVP_linkedlist* const list)
+{
+	if (list == NULL) return 0;
+	if (list->head == NULL) return 0;
+
+	uint32_t count = 0;
+
+	AVP_linkedlist_node* cursor_node = list->head;
+
+	while (cursor_node != NULL)
+	{
+		count++;
+
+		cursor_node = cursor_node->next;
+	}
+
+	return count;
+}
