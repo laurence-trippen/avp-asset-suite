@@ -1,4 +1,7 @@
-#pragma once
+#ifndef AVP_IO_H
+#define AVP_IO_H
+
+#include "avp_linked_list.h"
 
 
 typedef enum {
@@ -12,4 +15,6 @@ typedef struct {
 } AVP_io_file;
 
 
-AVP_io_result_t AVP_io_listfiles(const char* dir_path);
+AVP_io_result_t AVP_io_listfiles(const char* dir_path, AVP_linkedlist* result_list);
+
+#endif

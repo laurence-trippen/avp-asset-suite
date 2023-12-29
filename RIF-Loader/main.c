@@ -21,24 +21,13 @@ int main(void)
 
     printf("%s\n", rif_folder);
 
-    AVP_io_result_t result = AVP_io_listfiles(rif_folder);
+    AVP_linkedlist* result_list = AVP_create_linkedlist();
 
-    
-    AVP_linkedlist* list = AVP_create_linkedlist();
+    if (result_list == NULL) return EXIT_FAILURE;
 
-    if (list == NULL) return EXIT_FAILURE;
+    AVP_io_result_t result = AVP_io_listfiles(rif_folder, result_list);
 
-    int a = 117;
-    int b = 223;
-    int c = 99;
-
-    AVP_linkedlist_append(list, &a);
-    AVP_linkedlist_append(list, &b);
-    AVP_linkedlist_append(list, &c);
-
-    AVP_linkedlist_print(list->head, &linked_list_int_printer);
-
-    AVP_free_linkedlist(list);
+    AVP_free_linkedlist_with_data(result_list);
     
     return EXIT_SUCCESS;
 }

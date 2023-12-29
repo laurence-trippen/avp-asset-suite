@@ -15,10 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="avp_io_win.cpp">
+    <ClCompile Include="avp_io_win.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="avp_linked_list.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
