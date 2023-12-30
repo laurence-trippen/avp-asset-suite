@@ -24,12 +24,27 @@
     <ClCompile Include="avp_linked_list.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="avp_rif.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="avp_checker.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="avp_io.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="avp_linked_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="avp_rif.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="avp_checker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="avp_error.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

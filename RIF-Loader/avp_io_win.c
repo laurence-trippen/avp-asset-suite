@@ -12,6 +12,8 @@ AVP_io_result_t AVP_io_count_files(
 	const char* filter,
 	uint32_t* result_count)
 {
+	// TODO: implement filter here
+
 	WIN32_FIND_DATAA find_data;
 
 	HANDLE h_find = FindFirstFileA(dir_path, &find_data);
@@ -31,18 +33,27 @@ AVP_io_result_t AVP_io_count_files(
 }
 
 
-AVP_io_result_t AVP_io_listfiles(const char* dir_path, AVP_linkedlist* result_list)
+AVP_io_result_t AVP_io_listfiles(
+	const char* dir_path,
+	const char* filter,
+	AVP_linkedlist* result_list)
 {
+	const int PATH_LENGTH = 260;
+
+	// TODO: dir_path ends with (\\) check
+	// TODO: strcat error handling
+
+	char search_path[260] = { '\0' };
+	strcat_s(search_path, sizeof(search_path), dir_path);
+	strcat_s(search_path, sizeof(search_path), filter);
+
 	WIN32_FIND_DATAA find_data;
 
-	HANDLE h_find = FindFirstFileA(dir_path, &find_data);
-
+	HANDLE h_find = FindFirstFileA(search_path, &find_data);
 	if (h_find == INVALID_HANDLE_VALUE) return AVP_IO_INVALID_FILE;
 
 	do
 	{
-		const int PATH_LENGTH = 260;
-
 		// Must be freed with linked list
 		char* file_name = (char*)malloc(sizeof(char) * PATH_LENGTH);
 

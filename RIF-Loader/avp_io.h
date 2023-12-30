@@ -15,6 +15,9 @@ typedef struct {
 } AVP_io_file;
 
 
-AVP_io_result_t AVP_io_listfiles(const char* dir_path, AVP_linkedlist* result_list);
+AVP_io_result_t AVP_io_listfiles(
+	const char* dir_path, 
+	const char* filter,
+	AVP_linkedlist* result_list);
 
 #endif

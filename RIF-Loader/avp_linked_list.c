@@ -147,3 +147,15 @@ uint32_t AVP_linkedlist_count(AVP_linkedlist* const list)
 
 	return count;
 }
+
+
+void AVP_linkedlist_int_printer(void* data)
+{
+	printf("Printer: %d\n", *((int*)data));
+}
+
+
+void AVP_linkedlist_str_printer(void* data)
+{
+	printf("Printer: %s\n", (char*)data);
+}

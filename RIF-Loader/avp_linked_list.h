@@ -27,5 +27,8 @@ void AVP_linkedlist_print(
 
 uint32_t AVP_linkedlist_count(AVP_linkedlist* const list);
 
+void AVP_linkedlist_int_printer(void* data);
+void AVP_linkedlist_str_printer(void* data);
+
 
 #endif
