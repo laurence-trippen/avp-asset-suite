@@ -3,6 +3,15 @@
 
 #include <stdint.h>
 
+
+#define AVP_TRAVERSE_LIST(code, head) AVP_linkedlist_node* cursor = head; \
+while (cursor != NULL) { \
+code \
+cursor = cursor->next; \
+}
+
+
+
 typedef struct AVP_linkedlist_node_s {
 	struct AVP_linkedlist_node_s* next;
 	void* data;

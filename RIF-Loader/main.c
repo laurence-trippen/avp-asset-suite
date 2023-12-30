@@ -10,12 +10,9 @@
 int main(void)
 {
     const char rif_folder[] = "C:\\Games\\GOG\\AvP Classic\\avp_rifs\\";
-    printf("%s\n", rif_folder);
-
 
     AVP_error_t result = AVP_check_rif_headers(rif_folder);
     if (result == FATAL_ERROR) return EXIT_FAILURE;
-
 
     return EXIT_SUCCESS;
 }

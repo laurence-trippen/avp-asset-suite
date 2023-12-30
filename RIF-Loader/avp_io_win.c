@@ -54,7 +54,7 @@ AVP_io_result_t AVP_io_listfiles(
 
 	do
 	{
-		// Must be freed with linked list
+		// Must be freed with linked list later
 		char* file_name = (char*)malloc(sizeof(char) * PATH_LENGTH);
 
 		if (file_name == NULL) return AVP_IO_INVALID_FILE;
