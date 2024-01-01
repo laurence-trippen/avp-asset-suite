@@ -127,12 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="avp_huffman.cpp" />
     <ClCompile Include="avp_rif.cpp" />
     <ClCompile Include="avp_rif_chunks.cpp" />
     <ClCompile Include="avp_utils.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="avp_huffman.h" />
     <ClInclude Include="avp_rif.h" />
     <ClInclude Include="avp_rif_chunks.h" />
     <ClInclude Include="avp_utils.h" />
