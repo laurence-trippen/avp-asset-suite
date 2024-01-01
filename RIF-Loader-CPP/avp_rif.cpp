@@ -12,6 +12,7 @@ void AVP_Rif_Load(const char* path)
 	int error_code = 0;
 	bool rif_is_compressed = false;
 	char* uncompressedData = NULL;
+	char* buffer_ptr = NULL;
 
 
 	FILE* rif_file = fopen(path, "rb");
@@ -67,6 +68,8 @@ void AVP_Rif_Load(const char* path)
 		char* pointer_after_header = file_buffer + 8;
 		long file_size_without_header = file_size - 8;
 
+
+		// Read everything in compressed buffer except for header.
 		if (fread(pointer_after_header, 1, file_size_without_header, rif_file) != file_size_without_header)
 		{
 			error_code = AVP_CHUNK_FAILED_ON_LOAD;
@@ -75,19 +78,45 @@ void AVP_Rif_Load(const char* path)
 			return;
 		}
 
+
+		// Huffman Decompressiom
 		uncompressedData = HuffmanDecompress((HuffmanPackage*)file_buffer);
 		file_size = ((HuffmanPackage*)file_buffer)->UncompressedDataSize;
 
+
+		// Print Uncompressed File Size
 		char* const uncompressed_size = AVP_Format_Bytes(file_size, 2);
 		printf("%s\n", uncompressed_size);
 		free(uncompressed_size);
+
+
+		// Free old compressed file buffer
+		free(file_buffer);
+
+
+		file_buffer = uncompressedData + 12; // skip header data
+		buffer_ptr = file_buffer;
 	}
 	else
 	{
 
 	}
 
-	free(file_buffer);
+	while ((buffer_ptr - file_buffer) < ((signed)file_size - 12) && !error_code)
+	{
+
+		if ((*(int*)(buffer_ptr + 8)) + (buffer_ptr - file_buffer) > ((signed)file_size - 12))
+		{
+			error_code = AVP_CHUNK_FAILED_ON_LOAD_NOT_RECOGNISED;
+			break;
+		}
+
+		// DynCreate(buffer_ptr);
+
+		buffer_ptr += *(int*)(buffer_ptr + 8);
+	}
+
+	// free(file_buffer);
 
 	fclose(rif_file);
 	rif_file = NULL;
