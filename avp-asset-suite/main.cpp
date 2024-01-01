@@ -5,13 +5,16 @@
 #include <stdlib.h>
 #include <Windows.h>
 
-#include "ffl.h"
+#include "ffl_sound.h"
+#include "ffl_stdio.h"
 
 #pragma comment (lib, "winmm.lib")
 
 int main(void)
 {
-    FFL_LoadSounds();
+    int result = FFL_info_init("C:\\Games\\GOG\\AvP Classic\\fastfile\\ffinfo.txt", "fastfile\\");
+
+    // FFL_LoadSounds();
 
     // MessageBox(NULL, L"Hello", L"World", MB_OKCANCEL);
     // PlaySound(L"C:\\Users\\LT-Laptop\\Music\\CantinaBand60.wav", NULL, SND_SYNC);

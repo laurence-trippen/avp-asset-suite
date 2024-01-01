@@ -1,6 +1,4 @@
-#include "ffl.h"
-
-#include "wav.h"
+#include "ffl_sound.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -41,7 +39,7 @@ error:
 	}
 }
 
-
+/*
 unsigned char* ExtractWavFile(int soundIndex, unsigned char* bufferPtr)
 {
 	PWAVCHUNKHEADER myChunkHeader;
@@ -57,17 +55,17 @@ unsigned char* ExtractWavFile(int soundIndex, unsigned char* bufferPtr)
 		bufferPtr += length;
 	}
 
-	/* Read the WAV RIFF header */
+	// Read the WAV RIFF header
 	RebSndRead(&myChunkHeader, sizeof(PWAVCHUNKHEADER), 1, bufferPtr);
 	endOfBufferPtr = bufferPtr + myChunkHeader.chunkLength;
 
 	RebSndRead(&myRiffHeader, sizeof(PWAVRIFFHEADER), 1, bufferPtr);
 
-	/* Read the WAV format chunk */
+	// Read the WAV format chunk
 	RebSndRead(&myChunkHeader, sizeof(PWAVCHUNKHEADER), 1, bufferPtr);
 	if (myChunkHeader.chunkLength == 16)
 	{
-		/* a standard PCM wave format chunk */
+		// a standard PCM wave format chunk
 		PCMWAVEFORMAT tmpWaveFormat;
 		RebSndRead(&tmpWaveFormat, sizeof(PCMWAVEFORMAT), 1, bufferPtr);
 		myWaveFormat.wFormatTag = tmpWaveFormat.wf.wFormatTag;
@@ -80,42 +78,42 @@ unsigned char* ExtractWavFile(int soundIndex, unsigned char* bufferPtr)
 	}
 	else if (myChunkHeader.chunkLength == 18)
 	{
-		/* an extended PCM wave format chunk */
+		// an extended PCM wave format chunk
 		RebSndRead(&myWaveFormat, sizeof(WAVEFORMATEX), 1, bufferPtr);
 		myWaveFormat.cbSize = 0;
 	}
 	else
 	{
-		/* uh oh: a different chunk type */
+		// uh oh: a different chunk type
 		LOCALASSERT(1 == 0);
 		return 0;
 	}
 
-	/* Read	the data chunk header */
+	// Read	the data chunk header.
 	//skip chunks until we reach the 'data' chunk
 	do
 	{
-		/* Read	the data chunk header */
+		// Read	the data chunk header
 		RebSndRead(&myChunkHeader, sizeof(PWAVCHUNKHEADER), 1, bufferPtr);
 		if ((myChunkHeader.chunkName[0] == 'd') && (myChunkHeader.chunkName[1] == 'a') &&
 			(myChunkHeader.chunkName[2] == 't') && (myChunkHeader.chunkName[3] == 'a'))
 		{
 			break;
 		}
-		//skip to next chunk
+		// skip to next chunk
 		bufferPtr += myChunkHeader.chunkLength;
 	} while (TRUE);
 
-	/* Now do a few checks */
+	// Now do a few checks
 	if ((myChunkHeader.chunkName[0] != 'd') || (myChunkHeader.chunkName[1] != 'a') ||
 		(myChunkHeader.chunkName[2] != 't') || (myChunkHeader.chunkName[3] != 'a'))
 	{
-		/* chunk alignment disaster */
+		// chunk alignment disaster
 		LOCALASSERT(1 == 0);
 		return 0;
 	}
 
-	//calculate length of sample
+	// calculate length of sample
 	lengthInSeconds = DIV_FIXED(myChunkHeader.chunkLength, myWaveFormat.nAvgBytesPerSec);
 
 	if ((myChunkHeader.chunkLength < 0) || (myChunkHeader.chunkLength > SOUND_MAXSIZE))
@@ -140,7 +138,7 @@ unsigned char* ExtractWavFile(int soundIndex, unsigned char* bufferPtr)
 	}
 
 	{
-		/* Now set the buffer description and make a sound object */
+		// Now set the buffer description and make a sound object
 		DSBUFFERDESC dsBuffDesc;
 		LPDIRECTSOUNDBUFFER sndBuffer;
 		HRESULT hres;
@@ -155,20 +153,20 @@ unsigned char* ExtractWavFile(int soundIndex, unsigned char* bufferPtr)
 		dsBuffDesc.dwBufferBytes = myChunkHeader.chunkLength;
 		dsBuffDesc.lpwfxFormat = &myWaveFormat;
 
-		/* Do we need to specify 3D. */
+		// Do we need to specify 3D.
 		if (SoundConfig.flags & SOUND_3DHW)
 		{
 			dsBuffDesc.dwFlags |= DSBCAPS_CTRL3D;
 		}
 
-		/* If we have no Voice Manager support we must leave some hardware buffers free. */
+		// If we have no Voice Manager support we must leave some hardware buffers free.
 		if (SoundConfig.flags & SOUND_VOICE_MGER)
 		{
 			// Do nothing for the moment.
 		}
 		else
 		{
-			/* No Voice Manager. */
+			// No Voice Manager.
 			DSCAPS caps;
 			ZeroMemory(&caps, sizeof(DSCAPS));
 			caps.dwSize = sizeof(DSCAPS);
@@ -177,13 +175,13 @@ unsigned char* ExtractWavFile(int soundIndex, unsigned char* bufferPtr)
 			db_logf5(("caps.dwFreeHwMixingStaticBuffers %i SoundMinBufferFree %i", caps.dwFreeHwMixingStaticBuffers, SoundMinBufferFree));
 			if (caps.dwFreeHwMixingStaticBuffers < SoundMinBufferFree)
 			{
-				/* Force to software. */
+				// Force to software.
 				db_log3("Forcing buffer to software.");
 				dsBuffDesc.dwFlags |= DSBCAPS_LOCSOFTWARE;
 			}
 		}
 
-		/* Create the Direct Sound buffer for this sound */
+		// Create the Direct Sound buffer for this sound
 		hres = IDirectSound_CreateSoundBuffer(DSObject, &dsBuffDesc, &sndBuffer, NULL);
 		if (hres != DS_OK)
 		{
@@ -191,7 +189,7 @@ unsigned char* ExtractWavFile(int soundIndex, unsigned char* bufferPtr)
 			return 0;
 		}
 
-		/* Lock the buffer to allow the write */
+		// Lock the buffer to allow the write
 		hres = IDirectSoundBuffer_Lock(sndBuffer, 0, myChunkHeader.chunkLength,
 			&audioPtr1, &audioBytes1, &audioPtr2, &audioBytes2, 0);
 		if ((hres != DS_OK) || (audioPtr2 != NULL))
@@ -201,7 +199,7 @@ unsigned char* ExtractWavFile(int soundIndex, unsigned char* bufferPtr)
 			return 0;
 		}
 
-		/* Read data from file to buffer */
+		// Read data from file to buffer
 		RebSndRead(audioPtr1, 1, myChunkHeader.chunkLength, bufferPtr);
 #if 0
 		if (res != (size_t)myChunkHeader.chunkLength)
@@ -211,7 +209,7 @@ unsigned char* ExtractWavFile(int soundIndex, unsigned char* bufferPtr)
 			return 0;
 		}
 #endif
-		/* then unlock it and close the file */
+		// then unlock it and close the file
 		hres = IDirectSoundBuffer_Unlock(sndBuffer, audioPtr1, audioBytes1, audioPtr2, audioBytes2);
 		if (hres != DS_OK)
 		{
@@ -219,10 +217,10 @@ unsigned char* ExtractWavFile(int soundIndex, unsigned char* bufferPtr)
 			IDirectSoundBuffer_Release(sndBuffer);
 			return 0;
 		}
-		/* Finally, put a pointer the the buffer into the sound data */
+		// Finally, put a pointer the the buffer into the sound data
 		GameSounds[soundIndex].dsBufferP = sndBuffer;
 
-		/* Log it's position. */
+		// Log it's position.
 		{
 			DSBCAPS caps;
 			ZeroMemory(&caps, sizeof(DSBCAPS));
@@ -245,6 +243,7 @@ unsigned char* ExtractWavFile(int soundIndex, unsigned char* bufferPtr)
 
 	return endOfBufferPtr;
 }
+*/
 
 
 int FFL_LoadSounds(void)
@@ -290,7 +289,7 @@ int FFL_LoadSounds(void)
 		}
 		*/
 
-		bufferPtr = ExtractWavFile(soundIndex, bufferPtr);
+		// bufferPtr = ExtractWavFile(soundIndex, bufferPtr);
 
 		// GameSounds[soundIndex].loaded = 1;
 		// GameSounds[soundIndex].activeInstances = 0;

@@ -18,18 +18,18 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ffl_sound.cpp">
+    <ClCompile Include="avp_rif.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ffl_stdio.cpp">
+    <ClCompile Include="avp_rif_chunks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ffl_sound.h">
+    <ClInclude Include="avp_rif.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ffl_stdio.h">
+    <ClInclude Include="avp_rif_chunks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
